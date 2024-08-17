@@ -1,8 +1,8 @@
 package messagehandler
 
 type messageStruct struct {
-	messageType string // "group" or "private"
-	text        string
-	isToMe      bool
-	imgs        []string
+	MessageType string // "group" or "private"
+	Text        string
+	IsToMe      bool
+	Imgs        []string
 }

@@ -2,6 +2,7 @@ package messagehandler
 
 import (
 	"container/list"
+	"encoding/json"
 	"log"
 
 	"github.com/tidwall/gjson"
@@ -10,11 +11,34 @@ import (
 var bufferSize int = 16
 var messageQueue *list.List = list.New()
 
-func PushMessage(msg string) {
-	log.Printf("Receive message: %s\n", msg)
+func PushMessage(rawMessage string) {
+	//Format onebot message json and push into fifo queue.
+
+	//log.Printf("Receive raw message: %s\n", rawMessage)
 	var newMsg messageStruct
-	newMsg.messageType = gjson.Get(msg, "message_type").String()
-	if newMsg.messageType == "private" {
-		newMsg.isToMe = true
+	//Is private message?
+	newMsg.MessageType = gjson.Get(rawMessage, "message_type").String()
+	if newMsg.MessageType == "private" {
+		newMsg.IsToMe = true
 	}
+	//Is to me?
+	selfID := gjson.Get(rawMessage, "self_id").String()
+	atUsers := gjson.GetMany(rawMessage, "message.#(type==\"at\")#.data.qq")
+	for _, value := range atUsers {
+		if value.String() == selfID {
+			newMsg.IsToMe = true
+		}
+	}
+
+	//Extract all text from message.
+	textMessages := gjson.GetMany(rawMessage, "message.#(type==\"text\")#.data.text")
+	newMsg.Text = ""
+	for _, value := range textMessages {
+		newMsg.Text += value.String()
+	}
+
+	//TODO: unicode convert
+
+	dNewMsg, _ := json.Marshal(newMsg)
+	log.Printf("Receive message: %s\n", dNewMsg)
 }
