@@ -9,6 +9,7 @@ import (
 
 var hostAddress string = "localhost:2048"
 
+// The main thread to receive messages.
 func socketHandler(w http.ResponseWriter, r *http.Request) {
 	upgrader := websocket.Upgrader{}
 	ws, err := upgrader.Upgrade(w, r, nil)

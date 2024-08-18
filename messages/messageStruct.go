@@ -12,6 +12,7 @@ type MessageStruct struct {
 	IsToMe      bool
 	Imgs        []string
 }
+
 type MessageQueueStruct struct {
 	queue      *list.List
 	mutex      sync.Mutex
