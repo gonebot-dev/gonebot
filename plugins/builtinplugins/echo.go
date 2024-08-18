@@ -1,4 +1,4 @@
-package builtin
+package builtinplugins
 
 import (
 	"gonebot/messages"

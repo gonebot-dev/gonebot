@@ -1,8 +1,9 @@
 package main
 
 import (
-	"gonebot/backend/onebot11"
+	"gonebot/backend"
 	"gonebot/plugins"
+	"gonebot/plugins/builtinplugins"
 )
 
 func LoadPlugin(plugin plugins.GonePlugin) {
@@ -10,9 +11,10 @@ func LoadPlugin(plugin plugins.GonePlugin) {
 }
 
 func Start() {
-	onebot11.WebsocketServerInit()
+	backend.Initialization()
 }
 
 func main() {
 	Start()
+	LoadPlugin(builtinplugins.Echo)
 }

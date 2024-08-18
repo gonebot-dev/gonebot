@@ -28,7 +28,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func WebsocketServerInit() {
+func Initialization() {
 	http.HandleFunc("/onebot/v11/ws", socketHandler)
 	log.Fatal(http.ListenAndServe(hostAddress, nil))
 }

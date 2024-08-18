@@ -4,12 +4,14 @@ import (
 	"container/list"
 	"gonebot/configuations"
 	"gonebot/messages"
+	"log"
 	"strings"
 )
 
 var pluginList *list.List = list.New()
 
 func LoadPlugin(plugin GonePlugin) {
+	log.Printf("Plugin: %s", plugin.Name)
 	pluginList.PushBack(plugin)
 }
 
