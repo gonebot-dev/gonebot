@@ -7,6 +7,9 @@ import (
 	"github.com/tidwall/gjson"
 )
 
+// This file converts onebot11 json payload into MessageStruct.
+
+// Handle raw websocket payload
 func messageHandler(msg string) {
 	if !gjson.Valid(msg) {
 		log.Printf("Receive invalid JSON.\n")
@@ -52,5 +55,6 @@ func messageDecoder(rawMessage string) {
 		newMsg.Text += value.String()
 		return true // keep iterating, gjson
 	})
+	//Push message into messages queue.
 	messages.PushMessage(newMsg)
 }

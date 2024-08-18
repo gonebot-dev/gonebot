@@ -6,11 +6,12 @@ import (
 	"log"
 )
 
-var bufferSize int = 16
-var messageQueue *list.List = list.New()
+var bufferSize int = 32
+var MessageQueue *list.List = list.New()
 
+// Push messgage into a fifo queue with <bufferSize> limit.
 func PushMessage(newMsg MessageStruct) {
-	//Push message into queue.
+	MessageQueue.PushBack(newMsg)
 
 	dNewMsg, _ := json.Marshal(newMsg)
 	log.Printf("Receive message: %s\n", dNewMsg)
