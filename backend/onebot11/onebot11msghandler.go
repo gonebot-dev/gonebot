@@ -1,21 +1,36 @@
-package messagehandler
+package onebot11
 
 import (
-	"container/list"
-	"encoding/json"
+	"gonebot/messages"
 	"log"
 
 	"github.com/tidwall/gjson"
 )
 
-var bufferSize int = 16
-var messageQueue *list.List = list.New()
+func messageHandler(msg string) {
+	if !gjson.Valid(msg) {
+		log.Printf("Receive invalid JSON.\n")
+		return
+	}
+	//Not a message
+	MetaEventType := gjson.Get(msg, "meta_event_type")
+	if MetaEventType.Exists() {
+		//heartbeat
+		if MetaEventType.String() == "heartbeat" {
+			log.Printf("Receive Heartbeat.\n")
+		}
+	}
+	//Is a message
+	messageType := gjson.Get(msg, "message_type")
+	if messageType.Exists() {
+		messageDecoder(msg)
+	}
+}
 
-func PushMessage(rawMessage string) {
-	//Format onebot message json and push into fifo queue.
-
+// Format onebot message json and push into fifo queue.
+func messageDecoder(rawMessage string) {
 	log.Printf("Receive raw message: %s\n", rawMessage)
-	var newMsg messageStruct
+	var newMsg messages.MessageStruct
 	//Is private message?
 	newMsg.MessageType = gjson.Get(rawMessage, "message_type").String()
 	if newMsg.MessageType == "private" {
@@ -37,7 +52,5 @@ func PushMessage(rawMessage string) {
 		newMsg.Text += value.String()
 		return true // keep iterating, gjson
 	})
-
-	dNewMsg, _ := json.Marshal(newMsg)
-	log.Printf("Receive message: %s\n", dNewMsg)
+	messages.PushMessage(newMsg)
 }

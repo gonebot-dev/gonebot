@@ -1,6 +1,7 @@
-package messagehandler
+package messages
 
-type messageStruct struct {
+// An unified message struct in gonebot.
+type MessageStruct struct {
 	MessageType string // "group" or "private"
 	Text        string
 	IsToMe      bool
