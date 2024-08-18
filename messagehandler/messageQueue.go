@@ -14,7 +14,7 @@ var messageQueue *list.List = list.New()
 func PushMessage(rawMessage string) {
 	//Format onebot message json and push into fifo queue.
 
-	//log.Printf("Receive raw message: %s\n", rawMessage)
+	log.Printf("Receive raw message: %s\n", rawMessage)
 	var newMsg messageStruct
 	//Is private message?
 	newMsg.MessageType = gjson.Get(rawMessage, "message_type").String()
@@ -31,13 +31,12 @@ func PushMessage(rawMessage string) {
 	}
 
 	//Extract all text from message.
-	textMessages := gjson.GetMany(rawMessage, "message.#(type==\"text\")#.data.text")
 	newMsg.Text = ""
-	for _, value := range textMessages {
+	textMessages := gjson.Get(rawMessage, "message.#(type==\"text\")#.data.text")
+	textMessages.ForEach(func(_, value gjson.Result) bool {
 		newMsg.Text += value.String()
-	}
-
-	//TODO: unicode convert
+		return true // keep iterating, gjson
+	})
 
 	dNewMsg, _ := json.Marshal(newMsg)
 	log.Printf("Receive message: %s\n", dNewMsg)
