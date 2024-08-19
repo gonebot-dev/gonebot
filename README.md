@@ -17,3 +17,19 @@ How does gonebot work?
 3. The `Processor` will fetch messages from [`MessageQueue`](./messages/messageQueue.go), then invoke the `handler(MessageStruct)` of the plugins. The result [`resultStruct`](./messages/resultStruct.go) will be push into [`resultQueue`](./messages/resultQueue.go). This is the second thread.
 4. The `backend` will fetch results from [`resultQueue`] and send the results to frontend. This is the third thread.
 Step 2-4 will loop to finish all the jobs.
+```mermaid
+flowchart LR
+    Thread1[Receiver]
+    Queue1(MessageQueue)
+    Thread2[Processor]
+    Queue2(ResultQueue)
+    Thread3[Sender]
+    Thread1-->Queue1
+    Queue1-->Thread2
+    Thread2-->Queue2
+    Queue2-->Thread3
+    Thread3-->Queue2
+    Queue2-->Thread2
+    Thread2-->Queue1
+    Queue1-->Thread1
+```

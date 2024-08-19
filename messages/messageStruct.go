@@ -14,7 +14,7 @@ type MessageStruct struct {
 }
 
 type MessageQueueStruct struct {
-	queue      *list.List
 	mutex      sync.Mutex
+	queue      *list.List
 	bufferSize int
 }
