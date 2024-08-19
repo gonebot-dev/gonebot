@@ -11,15 +11,15 @@ import (
 var pluginList *list.List = list.New()
 
 func LoadPlugin(plugin GonePlugin) {
-	log.Printf("Plugin: %s", plugin.Name)
+	log.Printf("Loading Plugin: %s", plugin.Name)
 	pluginList.PushBack(plugin)
 }
 
-func TraversePlugins(msg messages.MessageStruct) (messages.MessageStruct, bool) {
+func TraversePlugins(msg messages.MessageStruct) (messages.ResultStruct, bool) {
 	for pluginElement := pluginList.Front(); pluginElement != nil; pluginElement = pluginElement.Next() {
 		plg, _ := pluginElement.Value.(GonePlugin)
 		for _, handler := range plg.Handlers {
-			if strings.HasPrefix(msg.Text, handler.Command) {
+			if strings.HasPrefix(msg.Text, configuations.GlobalPrefix+handler.Command) {
 				//Cut prefix off.
 				msg.Text = msg.Text[len(handler.Command)+len(configuations.GlobalPrefix):]
 				//Invoke handler
@@ -28,5 +28,5 @@ func TraversePlugins(msg messages.MessageStruct) (messages.MessageStruct, bool) 
 
 		}
 	}
-	return messages.MessageStruct{}, false
+	return messages.ResultStruct{}, false
 }

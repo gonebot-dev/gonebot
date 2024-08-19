@@ -1,6 +1,8 @@
 package messages
 
-import "container/list"
+import (
+	"container/list"
+)
 
 var ResultQueue ResultQueueStruct
 
@@ -12,6 +14,7 @@ func PushResult(result ResultStruct) {
 		ResultQueue.queue.Remove(ResultQueue.queue.Front())
 	}
 	ResultQueue.queue.PushBack(result)
+	//log.Printf("Pushing Result, %d left.\n", ResultQueue.queue.Len())
 }
 func PopResult() (ResultStruct, bool) {
 	ResultQueue.mutex.Lock()
@@ -19,6 +22,7 @@ func PopResult() (ResultStruct, bool) {
 	if ResultQueue.queue.Len() > 0 {
 		result, _ := ResultQueue.queue.Front().Value.(ResultStruct)
 		ResultQueue.queue.Remove(ResultQueue.queue.Front())
+		//log.Printf("Poping Result, %d left.\n", ResultQueue.queue.Len())
 		return result, true
 	}
 	return ResultStruct{}, false

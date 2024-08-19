@@ -12,21 +12,15 @@ var hostAddress string = "localhost:2048"
 // The main thread to receive messages.
 func socketHandler(w http.ResponseWriter, r *http.Request) {
 	upgrader := websocket.Upgrader{}
+	var err error
 	ws, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Printf("Error creating connection:\n%s\n", err)
 	}
+	log.Printf("Connection Established.\n")
 	defer ws.Close()
-	//Polling messages.
-	for {
-		_, message, err := ws.ReadMessage()
-		if err != nil {
-			log.Printf("Read message Error:\n%s\n", err)
-		}
-		msg := string(message)
-		messageHandler(msg)
-		//log.Printf("Received: %s\nType: %d\n", message, messageType)
-	}
+	go SendingMessage(ws)
+	ReadingMessage(ws)
 }
 
 func Initialization() {
