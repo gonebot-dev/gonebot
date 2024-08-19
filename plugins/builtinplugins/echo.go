@@ -13,6 +13,6 @@ func handler(msg messages.MessageStruct) messages.MessageStruct {
 
 func init() {
 	Echo.Name = "echo"
-	Echo.Command = "echo"
-	Echo.Handler = handler
+	echoHandler := plugins.GoneHandler{Command: "echo", Handler: handler}
+	Echo.Handlers = append(Echo.Handlers, echoHandler)
 }

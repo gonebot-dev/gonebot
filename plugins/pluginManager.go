@@ -18,11 +18,14 @@ func LoadPlugin(plugin GonePlugin) {
 func TraversePlugins(msg messages.MessageStruct) (messages.MessageStruct, bool) {
 	for pluginElement := pluginList.Front(); pluginElement != nil; pluginElement = pluginElement.Next() {
 		plg, _ := pluginElement.Value.(GonePlugin)
-		if strings.HasPrefix(msg.Text, plg.Command) {
-			//Cut prefix off.
-			msg.Text = msg.Text[len(plg.Command)+len(configuations.GlobalPrefix):]
-			//Invoke handler
-			return plg.Handler(msg), true
+		for _, handler := range plg.Handlers {
+			if strings.HasPrefix(msg.Text, handler.Command) {
+				//Cut prefix off.
+				msg.Text = msg.Text[len(handler.Command)+len(configuations.GlobalPrefix):]
+				//Invoke handler
+				return handler.Handler(msg), true
+			}
+
 		}
 	}
 	return messages.MessageStruct{}, false

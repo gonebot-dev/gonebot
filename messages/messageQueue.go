@@ -11,12 +11,12 @@ var MessageQueue MessageQueueStruct
 // Push messgage into a fifo queue with <bufferSize> limit.
 func PushMessage(newMsg MessageStruct) {
 	MessageQueue.mutex.Lock()
+	defer MessageQueue.mutex.Unlock()
 	if MessageQueue.queue.Len() == MessageQueue.bufferSize {
 		// queue full
 		MessageQueue.queue.Remove(MessageQueue.queue.Front())
 	}
 	MessageQueue.queue.PushBack(newMsg)
-	MessageQueue.mutex.Unlock()
 
 	dNewMsg, _ := json.Marshal(newMsg)
 	log.Printf("Receive message: %s\n", dNewMsg)
