@@ -2,10 +2,11 @@ package plugins
 
 import (
 	"container/list"
-	"gonebot/configuations"
-	"gonebot/messages"
 	"log"
 	"strings"
+
+	"github.com/gonebot-dev/gonebot/configuations"
+	"github.com/gonebot-dev/gonebot/messages"
 )
 
 var pluginList *list.List = list.New()

@@ -1,4 +1,4 @@
-module gonebot
+module github.com/gonebot-dev/gonebot
 
 go 1.22.6
 

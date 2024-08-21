@@ -2,9 +2,10 @@ package builtinplugins
 
 import (
 	"encoding/json"
-	"gonebot/messages"
-	"gonebot/plugins"
 	"log"
+
+	"github.com/gonebot-dev/gonebot/messages"
+	"github.com/gonebot-dev/gonebot/plugins"
 )
 
 var Echo plugins.GonePlugin

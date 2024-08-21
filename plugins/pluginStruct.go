@@ -1,6 +1,6 @@
 package plugins
 
-import "gonebot/messages"
+import "github.com/gonebot-dev/gonebot/messages"
 
 type GoneHandler struct {
 	Command string

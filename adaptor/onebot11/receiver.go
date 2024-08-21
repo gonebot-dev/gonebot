@@ -1,8 +1,9 @@
 package onebot11
 
 import (
-	"gonebot/messages"
 	"log"
+
+	"github.com/gonebot-dev/gonebot/messages"
 
 	"github.com/gorilla/websocket"
 	"github.com/tidwall/gjson"

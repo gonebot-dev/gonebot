@@ -1,9 +1,9 @@
 package gonebot
 
 import (
-	"gonebot/adaptor"
-	"gonebot/plugins"
-	"gonebot/processor"
+	"github.com/gonebot-dev/gonebot/adaptor"
+	"github.com/gonebot-dev/gonebot/plugins"
+	"github.com/gonebot-dev/gonebot/processor"
 )
 
 func LoadPlugin(plugin plugins.GonePlugin) {

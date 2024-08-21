@@ -1,6 +1,6 @@
 package adaptor
 
-import "gonebot/adaptor/onebot11"
+import "github.com/gonebot-dev/gonebot/adaptor/onebot11"
 
 // Start backend. If not set, use "onebot11" backend
 func StartBackend(backend string) {

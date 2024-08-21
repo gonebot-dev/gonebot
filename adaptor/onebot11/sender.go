@@ -2,9 +2,10 @@ package onebot11
 
 import (
 	"encoding/json"
-	"gonebot/messages"
 	"log"
 	"strconv"
+
+	"github.com/gonebot-dev/gonebot/messages"
 
 	"github.com/gorilla/websocket"
 )
