@@ -33,3 +33,9 @@ flowchart LR
     Thread2-->Queue1
     Queue1-->Thread1
 ```
+
+## TODO
+- [ ] Rewrite queues using channel.
+- [ ] Docs about how to create a plugin.
+- [ ] Images support.
+- [ ] README_CN.
