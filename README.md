@@ -39,3 +39,5 @@ flowchart LR
 - [ ] Docs about how to create a plugin.
 - [ ] Images support.
 - [ ] README_CN.
+- [ ] Plugin repository.
+- [ ] Multiple adaptor support.
