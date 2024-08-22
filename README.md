@@ -1,5 +1,6 @@
 # gonebot
-A Golang chatbot, currently support onebotv11.  
+A Golang chatbot, currently support onebotv11.
+[中文文档](./README_CN.md)  
 ## Catalog
 - [gonebot](#gonebot)
   - [Catalog](#catalog)
@@ -39,7 +40,7 @@ type GonePlugin struct {
 	Handlers    []GoneHandler
 }
 ```
-For example:
+For example, the builtin echo plugin:
 ```go
 func handler(msg messages.MessageStruct) messages.ResultStruct {
 	var result messages.ResultStruct
@@ -56,10 +57,10 @@ Echo.Handlers = append(Echo.Handlers, echoHandler)
 Your handler get a `MessageStruct` variable. You can analyze it and return a `ResultStruct`. Make use of your IDE's hint plugin!
 ## The logic of gonebot
 How does gonebot work?  
-1. Gonebot initialize: loading [configuations](./configuations/) and [plugins](./plugins/pluginManager.go).  
-2. First, the backend connect to the frontend and decode raw json payload into a [`MessageStruct`](./messages/messageStruct.go). The `MessageStruct` will be pushed into [`MessageQueue`](./messages/messageQueue.go). This is the main thread, loop in [`backend`](./backend/) section.  
+1. gonebot initialize: loading [configuations](./configuations/) and [plugins](./plugins/pluginManager.go).  
+2. First, the `adaptor` connect to the frontend,`receiver` decodes raw json payload into a [`MessageStruct`](./messages/messageStruct.go). The `MessageStruct` will be pushed into [`MessageQueue`](./messages/messageQueue.go). This is the main thread, loop in [`backend`](./backend/) section.  
 3. The `Processor` will fetch messages from [`MessageQueue`](./messages/messageQueue.go), then invoke the `handler(MessageStruct)` of the plugins. The result [`resultStruct`](./messages/resultStruct.go) will be push into [`resultQueue`](./messages/resultQueue.go). This is the second thread.
-4. The `backend` will fetch results from [`resultQueue`] and send the results to frontend. This is the third thread.
+4. The `adaptor` will fetch results from [`resultQueue`] and send the results to frontend. This is the third thread.
 Step 2-4 will loop to finish all the jobs.
 ```mermaid
 flowchart LR
