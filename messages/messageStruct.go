@@ -1,10 +1,5 @@
 package messages
 
-import (
-	"container/list"
-	"sync"
-)
-
 // An unified message struct in gonebot.
 type MessageStruct struct {
 	MessageType string // "group" or "private"
@@ -14,10 +9,4 @@ type MessageStruct struct {
 	IsToMe      bool   // Whether the message is sent to me.
 	Imgs        []string
 	SelfID      string // Uid of bot
-}
-
-type MessageQueueStruct struct {
-	mutex      sync.Mutex
-	queue      *list.List
-	bufferSize int
 }

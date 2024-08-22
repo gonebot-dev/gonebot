@@ -23,7 +23,7 @@ func TraversePlugins(msg messages.MessageStruct) (messages.ResultStruct, bool) {
 			for _, prefix := range handler.Command {
 				if strings.HasPrefix(msg.Text, configuations.GlobalPrefix+prefix) {
 					//Cut prefix off.
-					msg.Text = msg.Text[len(handler.Command)+len(configuations.GlobalPrefix):]
+					msg.Text = msg.Text[len(prefix)+len(configuations.GlobalPrefix):]
 					//Invoke handler
 					return handler.Handler(msg), true
 				}

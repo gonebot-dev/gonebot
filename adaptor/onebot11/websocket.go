@@ -19,8 +19,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	log.Printf("Connection Established.\n")
 	defer ws.Close()
-	go SendingMessage(ws)
-	ReadingMessage(ws)
+	BackendIO(ws)
 }
 
 func Initialization() {
