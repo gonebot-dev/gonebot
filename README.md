@@ -1,5 +1,5 @@
 # gonebot
-A Golang chatbot, currently support onebotv11.
+A Golang chatbot, currently support onebotv11.  
 [中文文档](./README_CN.md)  
 ## Catalog
 - [gonebot](#gonebot)
