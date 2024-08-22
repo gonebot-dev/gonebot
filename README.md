@@ -41,3 +41,4 @@ flowchart LR
 - [ ] README_CN.
 - [ ] Plugin repository.
 - [ ] Multiple adaptor support.
+- [ ] Advanced context support

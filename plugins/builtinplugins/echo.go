@@ -22,6 +22,8 @@ func handler(msg messages.MessageStruct) messages.ResultStruct {
 
 func init() {
 	Echo.Name = "echo"
-	echoHandler := plugins.GoneHandler{Command: "echo", Handler: handler}
+	echoHandler := plugins.GoneHandler{}
+	echoHandler.Command = []string{"echo"}
+	echoHandler.Handler = handler
 	Echo.Handlers = append(Echo.Handlers, echoHandler)
 }

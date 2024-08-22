@@ -20,11 +20,13 @@ func TraversePlugins(msg messages.MessageStruct) (messages.ResultStruct, bool) {
 	for pluginElement := pluginList.Front(); pluginElement != nil; pluginElement = pluginElement.Next() {
 		plg, _ := pluginElement.Value.(GonePlugin)
 		for _, handler := range plg.Handlers {
-			if strings.HasPrefix(msg.Text, configuations.GlobalPrefix+handler.Command) {
-				//Cut prefix off.
-				msg.Text = msg.Text[len(handler.Command)+len(configuations.GlobalPrefix):]
-				//Invoke handler
-				return handler.Handler(msg), true
+			for _, prefix := range handler.Command {
+				if strings.HasPrefix(msg.Text, configuations.GlobalPrefix+prefix) {
+					//Cut prefix off.
+					msg.Text = msg.Text[len(handler.Command)+len(configuations.GlobalPrefix):]
+					//Invoke handler
+					return handler.Handler(msg), true
+				}
 			}
 
 		}
