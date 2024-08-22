@@ -14,10 +14,7 @@ import (
 func SendingMessage(ws *websocket.Conn) {
 	log.Printf("Sender started.\n")
 	for { //get a result
-		result, succ := messages.PopResult()
-		if !succ {
-			continue
-		}
+		result := messages.PopResult()
 		var payload APIPayload
 		//send_private_message
 		if result.MessageType == "private" {
