@@ -37,8 +37,9 @@ flowchart LR
 ## TODO
 - [ ] Rewrite queues using channel.
 - [ ] Docs about how to create a plugin.
+- [ ] Dotenv configuation file support.
 - [ ] Images support.
 - [ ] README_CN.
 - [ ] Plugin repository.
 - [ ] Multiple adaptor support.
-- [ ] Advanced context support
+- [ ] Advanced context support.
