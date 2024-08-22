@@ -1,14 +1,13 @@
 package onebot11
 
 import (
-	"log"
 	"sync"
 
 	"github.com/gorilla/websocket"
 )
 
 func StartBackend() {
-	log.Printf("Using Backend Onebot11\n")
+
 	Initialization()
 }
 

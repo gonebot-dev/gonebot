@@ -4,10 +4,9 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/gonebot-dev/gonebot/configuations"
 	"github.com/gorilla/websocket"
 )
-
-var hostAddress string = "localhost:2048"
 
 // The main thread to receive messages.
 func socketHandler(w http.ResponseWriter, r *http.Request) {
@@ -23,6 +22,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func Initialization() {
+	log.Println("Trying to establish connection with onebot11.")
 	http.HandleFunc("/onebot/v11/ws", socketHandler)
-	log.Fatal(http.ListenAndServe(hostAddress, nil))
+	log.Fatal(http.ListenAndServe(configuations.BackendHostAddress, nil))
 }

@@ -4,9 +4,19 @@ A Golang chatbot, support onebot_v11.
 Easy to use. You can easily [load plugins](#how-to-create-a-bot) or [create them](#how-to-create-a-plugin).  
 Better Performance. Powered by golang.
 ## How to create a bot
+You can refer to [gonedemo](https://github.com/gonebot-dev/gonedemo)
 ```
-TODO
+package main
+import (
+	"github.com/gonebot-dev/gonebot"
+	"github.com/gonebot-dev/gonebot/plugins/builtinplugins"
+)
+func main() {
+	gonebot.LoadPlugin(builtinplugins.Echo)
+	gonebot.StartBackend("onebot11")
+}
 ```
+Done. Two lines, one bot.
 ## How to create a plugin
 To create a plugin, you need to implement a [`GonePlugin` struct](./plugins/pluginStruct.go) and simply load it.  
 
@@ -37,7 +47,7 @@ flowchart LR
 ## TODO
 - [x] Rewrite queues using channel.
 - [ ] Docs about how to create a plugin.
-- [ ] Dotenv configuation file support.
+- [x] Dotenv configuation file support.
 - [ ] Images message support.
 - [ ] README_CN.
 - [ ] Plugin repository.

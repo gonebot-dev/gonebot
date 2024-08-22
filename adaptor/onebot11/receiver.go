@@ -39,7 +39,7 @@ func messageHandler(msg string) {
 
 // Format onebot message json and push into fifo queue.
 func messageDecoder(rawMessage string) {
-	log.Printf("Receive raw message: %s\n", rawMessage)
+	//log.Printf("Receive raw message: %s\n", rawMessage)
 	var newMsg messages.MessageStruct
 	//Is private message?
 	newMsg.MessageType = gjson.Get(rawMessage, "message_type").String()
@@ -82,6 +82,5 @@ func ReadingMessage(ws *websocket.Conn) {
 		}
 		msg := string(message)
 		messageHandler(msg)
-		//log.Printf("Received: %s\nType: %d\n", message, messageType)
 	}
 }
