@@ -62,6 +62,12 @@ func messageDecoder(rawMessage string) {
 		newMsg.Text += value.String()
 		return true // keep iterating, gjson
 	})
+	//Extract all imgs from message.
+	imgMessages := gjson.Get(rawMessage, "message.#(type==\"image\")#.data.file")
+	imgMessages.ForEach(func(_, value gjson.Result) bool {
+		newMsg.Imgs = append(newMsg.Imgs, value.String())
+		return true
+	})
 
 	//Who send the message?
 	newMsg.SenderID = gjson.Get(rawMessage, "sender.user_id").String()
@@ -69,6 +75,9 @@ func messageDecoder(rawMessage string) {
 
 	//Who am i?
 	newMsg.SelfID = gjson.Get(rawMessage, "self_id").String()
+
+	//Advanced handler
+	newMsg.RawMessage = rawMessage
 
 	//Push message into messages queue.
 	messages.PushMessage(newMsg)

@@ -7,6 +7,7 @@ type MessageStruct struct {
 	SenderID    string   // Uid who send the message.
 	SenderName  string   // Nickname who send the message.
 	IsToMe      bool     // Whether the message is sent to me.
-	Imgs        []string //!Not implemented
+	Imgs        []string // Image urls
 	SelfID      string   // Uid of bot
+	RawMessage  string   // If U want it, you'll have to take it
 }

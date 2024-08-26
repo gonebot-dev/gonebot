@@ -7,7 +7,7 @@ import (
 	"github.com/joho/godotenv"
 )
 
-// Why named as aconfiguation? Multiple init() func will be invoked in dictionary order!
+// Why named as aaainit? Multiple init() func will be invoked in dictionary order!
 func init() {
 	err1 := godotenv.Load()
 	myEnv, err2 := godotenv.Read()
