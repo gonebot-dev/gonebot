@@ -83,7 +83,7 @@ flowchart LR
 - [x] Rewrite queues using channel.
 - [x] Docs about how to create a plugin.
 - [x] Dotenv configuation file support.
-- [ ] Images message support.
+- [x] Images message support.
 - [x] README_CN.
 - [ ] Plugin repository.
 - [ ] Multiple adaptor support.

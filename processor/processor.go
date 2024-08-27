@@ -11,7 +11,7 @@ import (
 // The message processor thread.
 func MessageProcessor() {
 	for {
-		msg := messages.PopMessage()
+		msg := messages.PopIncoming()
 
 		result, succ := plugins.TraversePlugins(msg)
 		if !succ {

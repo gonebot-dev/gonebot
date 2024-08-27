@@ -1,7 +1,7 @@
 package messages
 
-// An unified message struct in gonebot.
-type MessageStruct struct {
+// An unified incoming message struct in gonebot.
+type IncomingStruct struct {
 	MessageType string   // "group" or "private"
 	Text        string   // Plain text content of the message.
 	SenderID    string   // Uid who send the message.

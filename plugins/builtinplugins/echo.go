@@ -10,7 +10,7 @@ import (
 
 var Echo plugins.GonePlugin
 
-func handler(msg messages.MessageStruct) messages.ResultStruct {
+func handler(msg messages.IncomingStruct) messages.ResultStruct {
 	var result messages.ResultStruct
 	result.Text = msg.Text
 

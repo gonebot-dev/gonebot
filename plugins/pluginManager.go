@@ -16,7 +16,7 @@ func LoadPlugin(plugin GonePlugin) {
 	pluginList.PushBack(plugin)
 }
 
-func TraversePlugins(msg messages.MessageStruct) (messages.ResultStruct, bool) {
+func TraversePlugins(msg messages.IncomingStruct) (messages.ResultStruct, bool) {
 	for pluginElement := pluginList.Front(); pluginElement != nil; pluginElement = pluginElement.Next() {
 		plg, _ := pluginElement.Value.(GonePlugin)
 		for _, handler := range plg.Handlers {

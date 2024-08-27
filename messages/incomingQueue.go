@@ -5,10 +5,10 @@ import (
 	"log"
 )
 
-var MessageChannel chan MessageStruct
+var MessageChannel chan IncomingStruct
 
 // Push messgage into a fifo queue with <bufferSize> limit.
-func PushMessage(newMsg MessageStruct) {
+func PushIncoming(newMsg IncomingStruct) {
 	//channel full, drop
 	if cap(MessageChannel) == len(MessageChannel) {
 		<-MessageChannel
@@ -19,12 +19,12 @@ func PushMessage(newMsg MessageStruct) {
 	dNewMsg, _ := json.Marshal(newMsg)
 	log.Printf("Receive message: %s\n", dNewMsg)
 }
-func PopMessage() MessageStruct {
+func PopIncoming() IncomingStruct {
 	msg := <-MessageChannel
 	return msg
 
 }
 
 func init() {
-	MessageChannel = make(chan MessageStruct, 32)
+	MessageChannel = make(chan IncomingStruct, 32)
 }
