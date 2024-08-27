@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"net/http/pprof"
 	"testing"
-
-	"github.com/gonebot-dev/gonebot/plugins/builtinplugins"
 )
 
 func TestMain(m *testing.M) {
@@ -18,6 +16,5 @@ func TestMain(m *testing.M) {
 	mux.HandleFunc("/debug/pprof/trace", pprof.Trace)
 	go func() { log.Fatal(http.ListenAndServe(":8080", mux)) }()
 
-	LoadPlugin(builtinplugins.Echo)
 	StartBackend("onebot11")
 }
