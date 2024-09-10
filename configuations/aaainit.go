@@ -3,9 +3,15 @@ package configuations
 import (
 	"encoding/json"
 	"log"
+	"os"
 
 	"github.com/joho/godotenv"
 )
+
+func GetConf(name string) (result string) {
+	result = os.Getenv(name)
+	return result
+}
 
 // Why named as aaainit? Multiple init() func will be invoked in dictionary order!
 func init() {
