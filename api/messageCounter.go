@@ -26,6 +26,6 @@ func AddResultCount() {
 func GetResultCount() (result int) {
 	resultLock.RLock()
 	result = resultCount
-	resultLock.Unlock()
+	resultLock.RUnlock()
 	return result
 }

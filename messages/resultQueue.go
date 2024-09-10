@@ -1,5 +1,7 @@
 package messages
 
+import "github.com/gonebot-dev/gonebot/api"
+
 var ResultChannel chan ResultStruct
 
 func PushResult(result ResultStruct) {
@@ -13,6 +15,7 @@ func PushResult(result ResultStruct) {
 }
 func PopResult() ResultStruct {
 	msg := <-ResultChannel
+	defer api.AddResultCount()
 	return msg
 }
 

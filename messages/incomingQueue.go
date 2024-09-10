@@ -18,6 +18,7 @@ func PushIncoming(newMsg IncomingStruct) {
 	//push
 	MessageChannel <- newMsg
 
+	//counter add
 	api.AddIncomingCount()
 	dNewMsg, _ := json.Marshal(newMsg)
 	log.Printf("Receive message: %s\n", dNewMsg)
