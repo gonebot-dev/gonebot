@@ -85,6 +85,10 @@ func SendingMessage(ws *websocket.Conn) {
 			log.Println(err)
 		}
 
-		log.Printf("Sending message: %s\n", jsonResult)
+		if len(jsonResult) < 100 {
+			log.Printf("Sending message: %s\n", jsonResult)
+		} else {
+			log.Printf("Sending message: %s...\n", jsonResult[:100])
+		}
 	}
 }

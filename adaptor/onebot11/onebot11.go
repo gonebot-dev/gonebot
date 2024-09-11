@@ -7,7 +7,6 @@ import (
 )
 
 func StartBackend() {
-
 	Initialization()
 }
 

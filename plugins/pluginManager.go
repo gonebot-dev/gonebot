@@ -34,3 +34,7 @@ func TraversePlugins(msg messages.IncomingStruct) (messages.ResultStruct, bool) 
 	}
 	return messages.ResultStruct{}, false
 }
+
+func GetPluginCount() int {
+	return pluginList.Len()
+}

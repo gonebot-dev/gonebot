@@ -26,7 +26,6 @@ func PushIncoming(newMsg IncomingStruct) {
 func PopIncoming() IncomingStruct {
 	msg := <-MessageChannel
 	return msg
-
 }
 
 func init() {
