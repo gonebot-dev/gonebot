@@ -3,8 +3,8 @@ package onebot11
 import (
 	"log"
 	"net/http"
+	"os"
 
-	"github.com/gonebot-dev/gonebot/configuations"
 	"github.com/gorilla/websocket"
 )
 
@@ -22,7 +22,12 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func Initialization() {
+	BackendHostAddress := os.Getenv("ONEBOT11_HOST")
+	if BackendHostAddress == "" {
+		BackendHostAddress = "127.0.0.1:21390"
+	}
+
 	log.Println("Trying to establish connection with onebot11.")
 	http.HandleFunc("/onebot/v11/ws", socketHandler)
-	log.Fatal(http.ListenAndServe(configuations.BackendHostAddress, nil))
+	log.Fatal(http.ListenAndServe(BackendHostAddress, nil))
 }
