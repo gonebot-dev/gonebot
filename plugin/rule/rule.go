@@ -21,3 +21,11 @@ func (fb FilterBundle) Filter(msg message.Message) bool {
 	}
 	return true
 }
+
+func CreateFilter() FilterBundle {
+	return FilterBundle{}
+}
+
+func (b FilterBundle) AddFilter(f FilterRule) {
+	b.Filters = append(b.Filters, f)
+}
