@@ -126,14 +126,7 @@ func (m *Message) AttachSegment(seg MessageSegment, serializer MessageSerializer
 	m.rawText += serializer.ToRawText(seg)
 }
 
-// Attach the message contents together
-func (m *Message) AttachMessages(msgs ...Message) {
-	for _, v := range msgs {
-		m.segments = append(m.segments, v.segments...)
-		m.rawText += v.rawText
-	}
-}
-
+// Text attachs a plain text message segment to message
 func (m *Message) Text(text string) *Message {
 	serializer := GetSerializer("text", "")
 	m.AttachSegment(MessageSegment{
@@ -145,6 +138,7 @@ func (m *Message) Text(text string) *Message {
 	return m
 }
 
+// Image attachs an image message segment to message
 func (m *Message) Image(file string) *Message {
 	serializer := GetSerializer("image", "")
 	m.AttachSegment(MessageSegment{
@@ -156,6 +150,7 @@ func (m *Message) Image(file string) *Message {
 	return m
 }
 
+// Voice attachs a voice message segment to message
 func (m *Message) Voice(file string) *Message {
 	serializer := GetSerializer("voice", "")
 	m.AttachSegment(MessageSegment{
@@ -167,6 +162,7 @@ func (m *Message) Voice(file string) *Message {
 	return m
 }
 
+// Video attachs a video message segment to message
 func (m *Message) Video(file string) *Message {
 	serializer := GetSerializer("video", "")
 	m.AttachSegment(MessageSegment{
@@ -178,6 +174,7 @@ func (m *Message) Video(file string) *Message {
 	return m
 }
 
+// File attachs a file message segment to message
 func (m *Message) File(file string) *Message {
 	serializer := GetSerializer("file", "")
 	m.AttachSegment(MessageSegment{
@@ -189,10 +186,18 @@ func (m *Message) File(file string) *Message {
 	return m
 }
 
-func (m *Message) AnySegment(typeName, adapterName string, data MessageSerializer) *Message {
-	serializer := GetSerializer(typeName, adapterName)
+// Attach the message contents together
+func (m *Message) Join(msg Message) *Message {
+	m.segments = append(m.segments, msg.segments...)
+	m.rawText += msg.rawText
+	return m
+}
+
+// AnySegment attachs any message segment to message
+func (m *Message) AnySegment(data MessageSerializer) *Message {
+	serializer := GetSerializer(data.TypeName(), data.AdapterName())
 	m.AttachSegment(MessageSegment{
-		Type: typeName,
+		Type: data.TypeName(),
 		Data: serializer.Serialize(data, reflect.TypeOf(serializer)),
 	}, serializer)
 	return m

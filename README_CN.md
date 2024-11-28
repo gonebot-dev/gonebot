@@ -57,7 +57,7 @@ type GonePlugin struct {
 	Handlers []GoneHandler
 }
 ```
-比如我们内置的echo插件（查找`/echo`前缀并指向自己的消息，并返回相同的信息）：
+比如我们编写的echo插件（查找`/echo`前缀并指向自己的消息，并返回相同的信息）：
 ```go
 package echo
 
@@ -65,7 +65,7 @@ import (
 	"github.com/gonebot-dev/gonebot/adapter"
 	"github.com/gonebot-dev/gonebot/message"
 	"github.com/gonebot-dev/gonebot/plugin"
-	"github.com/gonebot-dev/gonebot/rule"
+	"github.com/gonebot-dev/gonebot/plugin/rule"
 )
 
 var Echo plugin.GonePlugin
@@ -76,12 +76,10 @@ func init() {
 	Echo.Description = "Reply the same message of what you have sent"
 
 	Echo.Handlers = append(Echo.Handlers, plugin.GoneHandler{
-		Rules: []rule.FilterBundle{{Filters: []rule.FilterRule{rule.ToMe(), rule.Command([]string{"echo"})}}},
+		Rules: rule.NewRules(rule.ToMe()).And(rule.Command("echo")),
 		Handler: func(a *adapter.Adapter, msg message.Message) bool {
-			reply := msg
-			reply.Sender = reply.Self
-			reply.Receiver = msg.Sender
-			a.SendChannel.Push(reply, false)
+			reply := message.NewReply(msg).Join(msg)
+			a.SendMessage(reply)
 			return true
 		},
 	})
