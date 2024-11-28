@@ -16,14 +16,7 @@ func parseMessage(a *adapter.Adapter, msg message.Message) {
 	for pluginElement := plugin.PluginList.Front(); pluginElement != nil; pluginElement = pluginElement.Next() {
 		plg, _ := pluginElement.Value.(*plugin.GonePlugin)
 		for _, handler := range plg.Handlers {
-			shouldHandle := false
-			for _, filter := range handler.Rules {
-				shouldHandle = filter.Filter(msg)
-				if shouldHandle {
-					break
-				}
-			}
-			if !shouldHandle {
+			if !handler.Rules.Filter(msg) {
 				continue
 			}
 			shouldBlock := handler.Handler(a, msg)

@@ -11,8 +11,12 @@ type TextType struct {
 	Text string `json:"text"`
 }
 
-func (serializer TextType) Matcher(typeName, adapterName string) bool {
-	return typeName == "text" && adapterName == ""
+func (serializer TextType) AdapterName() string {
+	return ""
+}
+
+func (serializer TextType) TypeName() string {
+	return "text"
 }
 
 func (serializer TextType) ToRawText(msg MessageSegment) string {
@@ -25,8 +29,12 @@ type ImageType struct {
 	File string `json:"file"`
 }
 
-func (serializer ImageType) Matcher(typeName, adapterName string) bool {
-	return typeName == "image" && adapterName == ""
+func (serializer ImageType) AdapterName() string {
+	return ""
+}
+
+func (serializer ImageType) TypeName() string {
+	return "image"
 }
 
 func (serializer ImageType) ToRawText(msg MessageSegment) string {
@@ -39,8 +47,12 @@ type VoiceType struct {
 	File string `json:"file"`
 }
 
-func (serializer VoiceType) Matcher(typeName, adapterName string) bool {
-	return typeName == "voice" && adapterName == ""
+func (serializer VoiceType) AdapterName() string {
+	return ""
+}
+
+func (serializer VoiceType) TypeName() string {
+	return "voice"
 }
 
 func (serializer VoiceType) ToRawText(msg MessageSegment) string {
@@ -53,8 +65,12 @@ type VideoType struct {
 	File string `json:"file"`
 }
 
-func (serializer VideoType) Matcher(typeName, adapterName string) bool {
-	return typeName == "video" && adapterName == ""
+func (serializer VideoType) AdapterName() string {
+	return ""
+}
+
+func (serializer VideoType) TypeName() string {
+	return "video"
 }
 
 func (serializer VideoType) ToRawText(msg MessageSegment) string {
@@ -67,8 +83,12 @@ type FileType struct {
 	File string `json:"file"`
 }
 
-func (serializer FileType) Matcher(typeName, adapterName string) bool {
-	return typeName == "file" && adapterName == ""
+func (serializer FileType) AdapterName() string {
+	return ""
+}
+
+func (serializer FileType) TypeName() string {
+	return "file"
 }
 
 func (serializer FileType) ToRawText(msg MessageSegment) string {
@@ -78,8 +98,8 @@ func (serializer FileType) ToRawText(msg MessageSegment) string {
 
 var SerializerRegistry = make(map[string]MessageSerializer)
 
-func RegisterSerializer(typeName, adapterName string, serializer MessageSerializer) {
-	identifier := fmt.Sprintf("%s:%s", adapterName, typeName)
+func RegisterSerializer(serializer MessageSerializer) {
+	identifier := fmt.Sprintf("%s:%s", serializer.AdapterName(), serializer.TypeName())
 	if _, exists := SerializerRegistry[identifier]; exists {
 		log.Fatalf("[GONEBOT] | RegisterSerializer: Duplicate serializer for type %s", identifier)
 	}

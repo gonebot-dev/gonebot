@@ -1,1 +1,9 @@
-gonebot
+# Editor folders
+.vs
+.vscode/
+.idea/
+
+# Testing
+test/
+
+gonebot_test.go

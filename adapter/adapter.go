@@ -31,11 +31,15 @@ type Adapter struct {
 //
 // # Otherwise the plugin handler would stuck!
 //
-// # I warn you!
+// # 🫵 I warn you!
 func (a *Adapter) CallAction(action *message.ActionCall) (result any) {
 	action.ResultChannel = make(chan any, 1)
 	a.ActionChannel.Push(action)
 	return <-action.ResultChannel
+}
+
+func (a *Adapter) SendMessage(msg *message.Message) {
+	a.SendChannel.Push(*msg, false)
 }
 
 var AdapterList *list.List = list.New()

@@ -20,8 +20,10 @@ type MessageSegment struct {
 
 // Implement this to create a message serializer
 type MessageSerializer interface {
-	// Whether the message segment is supported by this serializer
-	Matcher(typeName, adapterName string) bool
+	// Which adapter is this serializer for
+	AdapterName() string
+	// Which message type is this serializer for
+	TypeName() string
 	// Serialize a data to string
 	Serialize(data any, messageType reflect.Type) string
 	// Deserialize a message from string, will change to serializer type
@@ -103,13 +105,97 @@ func (m Message) GetRawText() string {
 	return m.rawText
 }
 
+func NewReply(m Message) *Message {
+	return &Message{
+		IsToMe:   false,
+		Group:    m.Group,
+		Sender:   m.Self,
+		Receiver: m.Sender,
+		Self:     m.Self,
+		segments: make([]MessageSegment, 0),
+		rawText:  "",
+	}
+}
+
 // Attach a segment for a message
-func (m *Message) Attach(seg MessageSegment, serializer MessageSerializer) {
-	if !serializer.Matcher(seg.Type, seg.Adapter) {
+func (m *Message) AttachSegment(seg MessageSegment, serializer MessageSerializer) {
+	if seg.Type != serializer.TypeName() || seg.Adapter != serializer.AdapterName() {
 		log.Fatalf("[GONEBOT] | Message: Invalid serializer for segment %#v\n", seg)
 	}
 	m.segments = append(m.segments, seg)
 	m.rawText += serializer.ToRawText(seg)
+}
+
+// Attach the message contents together
+func (m *Message) AttachMessages(msgs ...Message) {
+	for _, v := range msgs {
+		m.segments = append(m.segments, v.segments...)
+		m.rawText += v.rawText
+	}
+}
+
+func (m *Message) Text(text string) *Message {
+	serializer := GetSerializer("text", "")
+	m.AttachSegment(MessageSegment{
+		Type: "text",
+		Data: serializer.Serialize(TextType{
+			Text: "Hello, world!",
+		}, reflect.TypeOf(serializer)),
+	}, serializer)
+	return m
+}
+
+func (m *Message) Image(file string) *Message {
+	serializer := GetSerializer("image", "")
+	m.AttachSegment(MessageSegment{
+		Type: "image",
+		Data: serializer.Serialize(ImageType{
+			File: file,
+		}, reflect.TypeOf(serializer)),
+	}, serializer)
+	return m
+}
+
+func (m *Message) Voice(file string) *Message {
+	serializer := GetSerializer("voice", "")
+	m.AttachSegment(MessageSegment{
+		Type: "voice",
+		Data: serializer.Serialize(VoiceType{
+			File: file,
+		}, reflect.TypeOf(serializer)),
+	}, serializer)
+	return m
+}
+
+func (m *Message) Video(file string) *Message {
+	serializer := GetSerializer("video", "")
+	m.AttachSegment(MessageSegment{
+		Type: "video",
+		Data: serializer.Serialize(VideoType{
+			File: file,
+		}, reflect.TypeOf(serializer)),
+	}, serializer)
+	return m
+}
+
+func (m *Message) File(file string) *Message {
+	serializer := GetSerializer("file", "")
+	m.AttachSegment(MessageSegment{
+		Type: "file",
+		Data: serializer.Serialize(FileType{
+			File: file,
+		}, reflect.TypeOf(serializer)),
+	}, serializer)
+	return m
+}
+
+func (m *Message) AnySegment(typeName, adapterName string, data MessageSerializer) *Message {
+	serializer := GetSerializer(typeName, adapterName)
+	m.AttachSegment(MessageSegment{
+		Type: typeName,
+		Data: serializer.Serialize(data, reflect.TypeOf(serializer)),
+	}, serializer)
+	return m
 }
 
 func (m *Message) MarshalJSON() ([]byte, error) {
@@ -195,9 +281,9 @@ func (mc *MessageChannel) Pull() Message {
 
 func Init() {
 	// Register the builtin universal serializers
-	RegisterSerializer("text", "", TextType{})
-	RegisterSerializer("image", "", ImageType{})
-	RegisterSerializer("voice", "", VoiceType{})
-	RegisterSerializer("video", "", VideoType{})
-	RegisterSerializer("file", "", FileType{})
+	RegisterSerializer(TextType{})
+	RegisterSerializer(ImageType{})
+	RegisterSerializer(VoiceType{})
+	RegisterSerializer(VideoType{})
+	RegisterSerializer(FileType{})
 }

@@ -10,8 +10,8 @@ import (
 )
 
 // Command creates a filter rule that matches if the raw message is a command and is in the prefixList.
-func Command(prefixList []string) FilterRule {
-	return FilterRule{
+func Command(prefixList ...string) *Rule {
+	return &Rule{
 		Filter: func(msg message.Message) bool {
 			for _, prefix := range prefixList {
 				if strings.HasPrefix(
@@ -27,8 +27,8 @@ func Command(prefixList []string) FilterRule {
 }
 
 // FullMatch creates a filter rule that matches if the raw message is the same with one of the strings.
-func FullMatch(strs []string) FilterRule {
-	return FilterRule{
+func FullMatch(strs ...string) *Rule {
+	return &Rule{
 		Filter: func(msg message.Message) bool {
 			for _, str := range strs {
 				if str == msg.GetRawText() {
@@ -43,8 +43,8 @@ func FullMatch(strs []string) FilterRule {
 // Keyword creates a filter rule that matches if the raw message contains one of the keywords.
 //
 // If forceStart is true, the keyword must be at the start of the message.
-func Keyword(keywords []string, forceStart bool) FilterRule {
-	return FilterRule{
+func Keyword(forceStart bool, keywords ...string) *Rule {
+	return &Rule{
 		Filter: func(msg message.Message) bool {
 			for _, keyword := range keywords {
 				if forceStart && strings.HasPrefix(msg.GetRawText(), keyword) {
@@ -62,8 +62,8 @@ func Keyword(keywords []string, forceStart bool) FilterRule {
 // RegEx creates a filter rule that matches if the raw message does match one of the RegEx expressions.
 //
 // If you wrote a wrong RegEx expression, an error message with plugin name will be printed.
-func RegEx(pluginName string, exprs []string) FilterRule {
-	return FilterRule{
+func RegEx(pluginName string, exprs ...string) *Rule {
+	return &Rule{
 		Filter: func(msg message.Message) bool {
 			for _, expr := range exprs {
 				reg, err := regexp.Compile(expr)
@@ -83,8 +83,8 @@ func RegEx(pluginName string, exprs []string) FilterRule {
 // ToMe filters messages that are directed to the bot.(@bot or private message, should be identified by adapters)
 //
 // If your adapter don't, what can i say?
-func ToMe() FilterRule {
-	return FilterRule{
+func ToMe() *Rule {
+	return &Rule{
 		Filter: func(msg message.Message) bool {
 			return msg.IsToMe
 		},
@@ -94,10 +94,26 @@ func ToMe() FilterRule {
 // OfType filters messages that has the specified type for specified adapter
 //
 // # You must be sure the message has at least one segment
-func OfType(typeName, adapterName string) FilterRule {
-	return FilterRule{
+func OfType(typeName, adapterName string) *Rule {
+	return &Rule{
 		Filter: func(msg message.Message) bool {
 			return msg.GetSegments()[0].Type == typeName && msg.GetSegments()[0].Adapter == adapterName
+		},
+	}
+}
+
+// Notice filters messages with specified notice types.
+//
+// Combines it with `ToMe` to filter notice messages directed to the bot.
+func Notice(typeList ...string) *Rule {
+	return &Rule{
+		Filter: func(msg message.Message) bool {
+			for _, typeName := range typeList {
+				if msg.GetSegments()[0].Type == typeName {
+					return true
+				}
+			}
+			return false
 		},
 	}
 }
