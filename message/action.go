@@ -7,7 +7,7 @@ type ActionCall struct {
 	// Which action
 	Action any
 	// Which channel to push the result, will initialize automatically
-	ResultChannel chan any
+	ResultChannel *chan any
 }
 
 const ACTION_CHAN_CAPACITY = 64

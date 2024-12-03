@@ -33,9 +33,10 @@ type Adapter struct {
 //
 // # 🫵 I warn you!
 func (a *Adapter) CallAction(action *message.ActionCall) (result any) {
-	action.ResultChannel = make(chan any, 1)
+	resultChannel := make(chan any, 1)
+	action.ResultChannel = &resultChannel
 	a.ActionChannel.Push(action)
-	return <-action.ResultChannel
+	return <-resultChannel
 }
 
 func (a *Adapter) SendMessage(msg *message.Message) {
