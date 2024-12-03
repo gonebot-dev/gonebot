@@ -8,11 +8,7 @@ import (
 type MessageSegment struct {
 	// Message type
 	Type string `json:"type"`
-	// Which adapter is this message type for?
-	// Leave it empty if you are using universal message type
-	// If you have multiple adapters that have the same name, what can i say?
-	Adapter string `json:"-"`
-	// Use a message serializer to decode this
+	// Make sure it implements MessageType interface
 	Data MessageType `json:"data"`
 }
 
@@ -34,7 +30,7 @@ type Message struct {
 	Group string
 	// Who is sending this message?
 	Sender string
-	// Whi is receiving this message?
+	// Who is receiving this message?
 	Receiver string
 	// Who am i?
 	Self string

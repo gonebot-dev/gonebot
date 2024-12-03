@@ -97,7 +97,7 @@ func ToMe() *Rule {
 func OfType(typeName, adapterName string) *Rule {
 	return &Rule{
 		Filter: func(msg message.Message) bool {
-			return msg.GetSegments()[0].Type == typeName && msg.GetSegments()[0].Adapter == adapterName
+			return msg.GetSegments()[0].Type == typeName && msg.GetSegments()[0].Data.AdapterName() == adapterName
 		},
 	}
 }
