@@ -81,7 +81,6 @@ func Run() {
 
 func init() {
 	fmt.Print(banner)
-	message.Init()
 	configurations.Init()
 	log.Println("[GONEBOT] | Gonebot initilization complete!")
 }

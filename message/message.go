@@ -2,8 +2,6 @@ package message
 
 import (
 	"encoding/json"
-	"log"
-	"reflect"
 )
 
 // This describes a simple part of a message
@@ -15,68 +13,17 @@ type MessageSegment struct {
 	// If you have multiple adapters that have the same name, what can i say?
 	Adapter string `json:"-"`
 	// Use a message serializer to decode this
-	Data string `json:"data"`
+	Data MessageType `json:"data"`
 }
 
-// Implement this to create a message serializer
-type MessageSerializer interface {
-	// Which adapter is this serializer for
+// Implement this to create a message type
+type MessageType interface {
+	// Which adapter is this message for
 	AdapterName() string
-	// Which message type is this serializer for
+	// Which message type is this message for
 	TypeName() string
-	// Serialize a data to string
-	Serialize(data any, messageType reflect.Type) string
-	// Deserialize a message from string, will change to serializer type
-	Deserialize(str string, messageType reflect.Type) any
 	// Convert this message segment to raw text
 	ToRawText(msg MessageSegment) string
-}
-
-type MessageType struct{}
-
-// Serialize a data to string
-func (serializer MessageType) Serialize(data any, messageType reflect.Type) string {
-	var mapData map[string]any
-	if reflect.TypeOf(data) != reflect.TypeOf(make(map[string]any)) {
-		bs, err := json.Marshal(data)
-		if err != nil {
-			log.Fatalf("[GONEBOT] | %s.Serialize: Cannot convert data to map[string]any %#v\n", messageType.String(), data)
-		}
-		err = json.Unmarshal(bs, &mapData)
-		if err != nil {
-			log.Fatalf("[GONEBOT] | %s.Serialize: Cannot convert data to map[string]any %#v\n", messageType.String(), data)
-		}
-	} else {
-		mapData = data.(map[string]any)
-	}
-	value := reflect.New(messageType).Elem()
-	for i := 0; i < messageType.NumField(); i++ {
-		fieldName := messageType.Field(i).Tag.Get("json")
-		val, ok := mapData[fieldName]
-		if !ok {
-			continue
-		}
-		fieldValue := value.Field(i)
-		if !fieldValue.CanSet() {
-			continue
-		}
-		fieldValue.Set(reflect.ValueOf(val))
-	}
-	result, _ := json.Marshal(value.Interface())
-	return string(result)
-}
-
-// Deserialize a message from string, will change to serializer type
-func (serializer MessageType) Deserialize(data string, messageType reflect.Type) any {
-	if data == "" {
-		data = "{}"
-	}
-	value := reflect.New(messageType).Elem()
-	err := json.Unmarshal([]byte(data), value.Addr().Interface())
-	if err != nil {
-		log.Fatalf("[GONEBOT] | %s.Deserialize: Invalid data %s\n", messageType.String(), data)
-	}
-	return value.Interface()
 }
 
 // This describes the whole message
@@ -126,71 +73,63 @@ func NewReply(m Message) *Message {
 }
 
 // Attach a segment for a message
-func (m *Message) AttachSegment(seg MessageSegment, serializer MessageSerializer) {
-	if seg.Type != serializer.TypeName() || seg.Adapter != serializer.AdapterName() {
-		log.Fatalf("[GONEBOT] | Message: Invalid serializer for segment %#v\n", seg)
-	}
+func (m *Message) AttachSegment(seg MessageSegment) {
 	m.segments = append(m.segments, seg)
-	m.rawText += serializer.ToRawText(seg)
+	m.rawText += seg.Data.ToRawText(seg)
 }
 
 // Text attachs a plain text message segment to message
 func (m *Message) Text(text string) *Message {
-	serializer := GetSerializer("text", "")
 	m.AttachSegment(MessageSegment{
 		Type: "text",
-		Data: serializer.Serialize(TextType{
+		Data: TextType{
 			Text: "Hello, world!",
-		}, reflect.TypeOf(serializer)),
-	}, serializer)
+		},
+	})
 	return m
 }
 
 // Image attachs an image message segment to message
 func (m *Message) Image(file string) *Message {
-	serializer := GetSerializer("image", "")
 	m.AttachSegment(MessageSegment{
 		Type: "image",
-		Data: serializer.Serialize(ImageType{
+		Data: ImageType{
 			File: file,
-		}, reflect.TypeOf(serializer)),
-	}, serializer)
+		},
+	})
 	return m
 }
 
 // Voice attachs a voice message segment to message
 func (m *Message) Voice(file string) *Message {
-	serializer := GetSerializer("voice", "")
 	m.AttachSegment(MessageSegment{
 		Type: "voice",
-		Data: serializer.Serialize(VoiceType{
+		Data: VoiceType{
 			File: file,
-		}, reflect.TypeOf(serializer)),
-	}, serializer)
+		},
+	})
 	return m
 }
 
 // Video attachs a video message segment to message
 func (m *Message) Video(file string) *Message {
-	serializer := GetSerializer("video", "")
 	m.AttachSegment(MessageSegment{
 		Type: "video",
-		Data: serializer.Serialize(VideoType{
+		Data: VideoType{
 			File: file,
-		}, reflect.TypeOf(serializer)),
-	}, serializer)
+		},
+	})
 	return m
 }
 
 // File attachs a file message segment to message
 func (m *Message) File(file string) *Message {
-	serializer := GetSerializer("file", "")
 	m.AttachSegment(MessageSegment{
 		Type: "file",
-		Data: serializer.Serialize(FileType{
+		Data: FileType{
 			File: file,
-		}, reflect.TypeOf(serializer)),
-	}, serializer)
+		},
+	})
 	return m
 }
 
@@ -202,12 +141,11 @@ func (m *Message) Join(msg Message) *Message {
 }
 
 // AnySegment attachs any message segment to message
-func (m *Message) AnySegment(data MessageSerializer) *Message {
-	serializer := GetSerializer(data.TypeName(), data.AdapterName())
+func (m *Message) AnySegment(data MessageType) *Message {
 	m.AttachSegment(MessageSegment{
 		Type: data.TypeName(),
-		Data: serializer.Serialize(data, reflect.TypeOf(serializer)),
-	}, serializer)
+		Data: data,
+	})
 	return m
 }
 
@@ -290,13 +228,4 @@ func (mc *MessageChannel) Push(msg Message, isReceive bool) {
 // Pull a message from the channel
 func (mc *MessageChannel) Pull() Message {
 	return <-(*mc).channel
-}
-
-func Init() {
-	// Register the builtin universal serializers
-	RegisterSerializer(TextType{})
-	RegisterSerializer(ImageType{})
-	RegisterSerializer(VoiceType{})
-	RegisterSerializer(VideoType{})
-	RegisterSerializer(FileType{})
 }
