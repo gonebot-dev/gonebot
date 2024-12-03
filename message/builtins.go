@@ -1,6 +1,7 @@
 package message
 
 import (
+	"encoding/json"
 	"fmt"
 )
 
@@ -86,17 +87,28 @@ func (serializer FileType) ToRawText(msg MessageSegment) string {
 
 // Convert raw MessageSegment.Data to built-in MessageType
 func ToBuiltIn(typeName string, msg any) MessageType {
+	tmp, _ := json.Marshal(msg)
 	switch typeName {
 	case "text":
-		return msg.(TextType)
+		var result TextType
+		_ = json.Unmarshal(tmp, &result)
+		return result
 	case "image":
-		return msg.(ImageType)
+		var result ImageType
+		_ = json.Unmarshal(tmp, &result)
+		return result
 	case "voice":
-		return msg.(VoiceType)
+		var result VoiceType
+		_ = json.Unmarshal(tmp, &result)
+		return result
 	case "video":
-		return msg.(VideoType)
+		var result VideoType
+		_ = json.Unmarshal(tmp, &result)
+		return result
 	case "file":
-		return msg.(FileType)
+		var result FileType
+		_ = json.Unmarshal(tmp, &result)
+		return result
 	default:
 		return nil
 	}
