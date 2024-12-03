@@ -141,7 +141,7 @@ func (m *Message) Join(msg Message) *Message {
 }
 
 // AnySegment attachs any message segment to message
-func (m *Message) AnySegment(data MessageType) *Message {
+func (m *Message) Any(data MessageType) *Message {
 	m.AttachSegment(MessageSegment{
 		Type: data.TypeName(),
 		Data: data,
