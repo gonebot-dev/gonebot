@@ -85,18 +85,18 @@ func (serializer FileType) ToRawText(msg MessageSegment) string {
 }
 
 // Convert raw MessageSegment.Data to built-in MessageType
-func ToBuiltIn(msg MessageSegment) MessageType {
-	switch msg.Type {
+func ToBuiltIn(typeName string, msg any) MessageType {
+	switch typeName {
 	case "text":
-		return msg.Data.(TextType)
+		return msg.(TextType)
 	case "image":
-		return msg.Data.(ImageType)
+		return msg.(ImageType)
 	case "voice":
-		return msg.Data.(VoiceType)
+		return msg.(VoiceType)
 	case "video":
-		return msg.Data.(VideoType)
+		return msg.(VideoType)
 	case "file":
-		return msg.Data.(FileType)
+		return msg.(FileType)
 	default:
 		return nil
 	}
