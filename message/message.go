@@ -13,7 +13,7 @@ type MessageSegment struct {
 	// Which adapter is this message type for?
 	// Leave it empty if you are using universal message type
 	// If you have multiple adapters that have the same name, what can i say?
-	Adapter string `json:"adapter"`
+	Adapter string `json:"-"`
 	// Use a message serializer to decode this
 	Data string `json:"data"`
 }
@@ -103,6 +103,14 @@ func (m Message) GetSegments() []MessageSegment {
 
 func (m Message) GetRawText() string {
 	return m.rawText
+}
+
+func NewMessage() *Message {
+	return &Message{
+		IsToMe:   false,
+		segments: make([]MessageSegment, 0),
+		rawText:  "",
+	}
 }
 
 func NewReply(m Message) *Message {
