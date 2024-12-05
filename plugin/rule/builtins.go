@@ -127,8 +127,10 @@ func Notice(typeList ...string) *Rule {
 	return &Rule{
 		Filter: func(msg message.Message) bool {
 			for _, typeName := range typeList {
-				if msg.GetSegments()[0].Type == typeName {
-					return true
+				for _, segment := range msg.GetSegments() {
+					if segment.Type == typeName {
+						return true
+					}
 				}
 			}
 			return false
