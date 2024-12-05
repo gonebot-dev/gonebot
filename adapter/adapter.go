@@ -32,10 +32,11 @@ type Adapter struct {
 // # Otherwise the plugin handler would stuck!
 //
 // # 🫵 I warn you!
-func (a *Adapter) CallAction(action *message.ActionCall) (result any) {
+func (a *Adapter) CallAction(action any) (result any) {
+	act := message.ActionCall{Action: action}
 	resultChannel := make(chan any, 1)
-	action.ResultChannel = &resultChannel
-	a.ActionChannel.Push(action)
+	act.ResultChannel = &resultChannel
+	a.ActionChannel.Push(&act)
 	return <-resultChannel
 }
 
