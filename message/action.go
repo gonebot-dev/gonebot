@@ -2,8 +2,6 @@ package message
 
 // If you want to call adapter action, you should use this struct
 type ActionCall struct {
-	// Which adapter to call
-	AdapterName string
 	// Which action
 	Action any
 	// Which channel to push the result, will initialize automatically
