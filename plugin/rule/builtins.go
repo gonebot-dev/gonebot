@@ -9,6 +9,24 @@ import (
 	"github.com/gonebot-dev/gonebot/message"
 )
 
+// Always always returns true
+func Always() *Rule {
+	return &Rule{
+		Filter: func(msg message.Message) bool {
+			return true
+		},
+	}
+}
+
+// Never never returns true
+func Never() *Rule {
+	return &Rule{
+		Filter: func(msg message.Message) bool {
+			return false
+		},
+	}
+}
+
 // Command creates a filter rule that matches if the raw message is a command and is in the prefixList.
 func Command(prefixList ...string) *Rule {
 	return &Rule{
