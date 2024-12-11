@@ -1,7 +1,6 @@
 package logging
 
 import (
-	"fmt"
 	"os"
 	"strings"
 	"time"
@@ -24,8 +23,5 @@ func Logf(level zerolog.Level, callerName string, format string, v ...any) {
 func Init() {
 	// Zerolog configuration
 	output := zerolog.ConsoleWriter{Out: os.Stdout, TimeFormat: time.DateTime}
-	output.FormatLevel = func(i any) string {
-		return strings.ToUpper(fmt.Sprintf("| %-6s |", i))
-	}
 	Logger = zerolog.New(output).With().Timestamp().Logger()
 }
