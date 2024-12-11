@@ -12,12 +12,12 @@ var Logger zerolog.Logger
 
 func Log(level zerolog.Level, callerName string, msg string) {
 	callerName = strings.ToUpper(callerName)
-	Logger.WithLevel(level).Msgf(" | [%s] | %s", callerName, msg)
+	Logger.WithLevel(level).Msgf("| [%s] | %s", callerName, msg)
 }
 
 func Logf(level zerolog.Level, callerName string, format string, v ...any) {
 	callerName = strings.ToUpper(callerName)
-	Logger.WithLevel(level).Msgf(" | ["+callerName+"] | "+format, v...)
+	Logger.WithLevel(level).Msgf("| ["+callerName+"] | "+format, v...)
 }
 
 func Init() {
