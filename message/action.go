@@ -4,6 +4,8 @@ package message
 type ActionCall struct {
 	// Which action
 	Action any
+	// Which adapter to call
+	AdapterName string
 	// Which channel to push the result, will initialize automatically
 	ResultChannel *chan any
 }

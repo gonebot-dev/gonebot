@@ -2,6 +2,8 @@ package gonebot
 
 import (
 	"fmt"
+	"os"
+	"strings"
 	"sync"
 
 	"github.com/gonebot-dev/gonebot/adapter"
@@ -83,6 +85,29 @@ func Run() {
 func init() {
 	fmt.Print(banner)
 	configurations.Init()
+	level, ok := os.LookupEnv("LOG_LEVEL")
+	if !ok {
+		level = "INFO"
+	}
+	level = strings.ToUpper(level)
+	switch level {
+	case "TRACE":
+		zerolog.SetGlobalLevel(zerolog.TraceLevel)
+	case "DEBUG":
+		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+	case "INFO":
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	case "WARN":
+		zerolog.SetGlobalLevel(zerolog.WarnLevel)
+	case "ERROR":
+		zerolog.SetGlobalLevel(zerolog.ErrorLevel)
+	case "FATAL":
+		zerolog.SetGlobalLevel(zerolog.FatalLevel)
+	case "PANIC":
+		zerolog.SetGlobalLevel(zerolog.PanicLevel)
+	default:
+		zerolog.SetGlobalLevel(zerolog.InfoLevel)
+	}
 
 	logging.Log(zerolog.InfoLevel, "GoneBot", "GoneBot initilization complete!")
 }
