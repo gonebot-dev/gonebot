@@ -82,10 +82,12 @@ func Run() {
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
 		<-c
+		logging.Log(zerolog.InfoLevel, "GoneBot", "GoneBot is shutting down...")
 		for adapterInstance := adapter.AdapterList.Front(); adapterInstance != nil; adapterInstance = adapterInstance.Next() {
 			a, _ := adapterInstance.Value.(*adapter.Adapter)
 			a.Finalize()
 		}
+		logging.Log(zerolog.InfoLevel, "GoneBot", "GoneBot shutdown complete!")
 		os.Exit(0)
 	}()
 }
