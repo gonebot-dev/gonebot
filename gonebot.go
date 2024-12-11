@@ -3,8 +3,10 @@ package gonebot
 import (
 	"fmt"
 	"os"
+	"os/signal"
 	"strings"
 	"sync"
+	"syscall"
 
 	"github.com/gonebot-dev/gonebot/adapter"
 	"github.com/gonebot-dev/gonebot/configurations"
@@ -76,10 +78,14 @@ func Run() {
 		go messageListener(a)
 	}
 	waitGroup.Wait()
-	for adapterInstance := adapter.AdapterList.Front(); adapterInstance != nil; adapterInstance = adapterInstance.Next() {
-		a, _ := adapterInstance.Value.(*adapter.Adapter)
-		a.Finalize()
-	}
+	c := make(chan os.Signal, 2)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+	go func() {
+		for adapterInstance := adapter.AdapterList.Front(); adapterInstance != nil; adapterInstance = adapterInstance.Next() {
+			a, _ := adapterInstance.Value.(*adapter.Adapter)
+			a.Finalize()
+		}
+	}()
 }
 
 func init() {
