@@ -84,6 +84,7 @@ func Run() {
 
 func init() {
 	fmt.Print(banner)
+	logging.Init()
 	configurations.Init()
 	level, ok := os.LookupEnv("LOG_LEVEL")
 	if !ok {
