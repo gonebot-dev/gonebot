@@ -81,6 +81,7 @@ func Run() {
 	c := make(chan os.Signal, 2)
 	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
 	go func() {
+		<-c
 		for adapterInstance := adapter.AdapterList.Front(); adapterInstance != nil; adapterInstance = adapterInstance.Next() {
 			a, _ := adapterInstance.Value.(*adapter.Adapter)
 			a.Finalize()
