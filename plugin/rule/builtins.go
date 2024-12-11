@@ -1,12 +1,13 @@
 package rule
 
 import (
-	"log"
+	"os"
 	"regexp"
 	"strings"
 
-	"github.com/gonebot-dev/gonebot/configurations"
+	"github.com/gonebot-dev/gonebot/logging"
 	"github.com/gonebot-dev/gonebot/message"
+	"github.com/rs/zerolog"
 )
 
 // Always always returns true
@@ -29,12 +30,16 @@ func Never() *Rule {
 
 // Command creates a filter rule that matches if the raw message is a command and is in the prefixList.
 func Command(prefixList ...string) *Rule {
+	commandStart, ok := os.LookupEnv("COMMAND_START")
+	if !ok {
+		commandStart = "/"
+	}
 	return &Rule{
 		Filter: func(msg message.Message) bool {
 			for _, prefix := range prefixList {
 				if strings.HasPrefix(
 					msg.GetRawText(),
-					configurations.GetConf("COMMAND_START")+prefix,
+					commandStart+prefix,
 				) {
 					return true
 				}
@@ -86,7 +91,7 @@ func RegEx(pluginName string, exprs ...string) *Rule {
 			for _, expr := range exprs {
 				reg, err := regexp.Compile(expr)
 				if err != nil {
-					log.Printf("[GONEBOT] | %s: RegEx filter rule compilation error!\n", pluginName)
+					logging.Logf(zerolog.ErrorLevel, "GoneBot", "%s: RegEx filter rule compilation error!\n", pluginName)
 					return false
 				}
 				if reg.FindStringIndex(msg.GetRawText()) != nil {

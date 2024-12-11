@@ -2,7 +2,9 @@ package plugin
 
 import (
 	"container/list"
-	"log"
+
+	"github.com/gonebot-dev/gonebot/logging"
+	"github.com/rs/zerolog"
 )
 
 // Use this to create your own plugin.
@@ -21,7 +23,7 @@ var PluginList *list.List = list.New()
 
 // Load plugin to PluginList for usage.
 func LoadPlugin(plugin *GonePlugin) {
-	log.Printf("[GONEBOT] | Loading Plugin: %s", plugin.Name)
+	logging.Logf(zerolog.InfoLevel, "GoneBot", "Loading Plugin: %s", plugin.Name)
 	PluginList.PushBack(plugin)
 }
 

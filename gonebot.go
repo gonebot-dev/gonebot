@@ -2,13 +2,14 @@ package gonebot
 
 import (
 	"fmt"
-	"log"
 	"sync"
 
 	"github.com/gonebot-dev/gonebot/adapter"
 	"github.com/gonebot-dev/gonebot/configurations"
+	"github.com/gonebot-dev/gonebot/logging"
 	"github.com/gonebot-dev/gonebot/message"
 	"github.com/gonebot-dev/gonebot/plugin"
+	"github.com/rs/zerolog"
 )
 
 func parseMessage(a *adapter.Adapter, msg message.Message) {
@@ -82,5 +83,6 @@ func Run() {
 func init() {
 	fmt.Print(banner)
 	configurations.Init()
-	log.Println("[GONEBOT] | Gonebot initilization complete!")
+
+	logging.Log(zerolog.InfoLevel, "GoneBot", "GoneBot initilization complete!")
 }
