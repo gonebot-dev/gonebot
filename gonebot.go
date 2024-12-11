@@ -85,6 +85,7 @@ func Run() {
 			a, _ := adapterInstance.Value.(*adapter.Adapter)
 			a.Finalize()
 		}
+		os.Exit(0)
 	}()
 }
 
