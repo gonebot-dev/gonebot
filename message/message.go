@@ -79,7 +79,7 @@ func (m *Message) Text(text string) *Message {
 	m.AttachSegment(MessageSegment{
 		Type: "text",
 		Data: TextType{
-			Text: "Hello, world!",
+			Text: text,
 		},
 	})
 	return m
