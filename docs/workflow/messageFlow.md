@@ -27,3 +27,7 @@ flowchart TD
   ActiveHandlers --> result
   result -- "result msgs" --> Adapter
 ```
+
+## CacheChan
+
+The two channels work as message cache, in order to handle with sudden load.
