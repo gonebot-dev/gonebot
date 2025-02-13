@@ -6,6 +6,7 @@ pkgs.mkShell {
     pkgs.go
     pkgs.gopls
     pkgs.delve
+    pkgs.go-tools
   ];
 
   shellHook = ''
