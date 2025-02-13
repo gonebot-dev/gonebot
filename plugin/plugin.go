@@ -7,6 +7,6 @@ type GonePlugin struct {
 	Description string
 	Version     string
 
-	Handler       []handler.GoneHandler
-	ActiveHandler []handler.GoneActiveHandler
+	Handlers       []handler.GoneHandler
+	ActiveHandlers []handler.GoneActiveHandler
 }

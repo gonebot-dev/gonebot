@@ -4,8 +4,8 @@ package message
 type Message struct {
 	// UID of sender.
 	SenderID string
-	// UID of the bot.
-	SelfID string
+	// UID of the receiver. If IsGroup, ReceiverID is bot's ID
+	ReceiverID string
 
 	// Whether it is a group message.
 	IsGroup bool
