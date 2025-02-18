@@ -42,7 +42,7 @@ func activeHandler(resultChan chan message.Message) {
 	handlerCount := 0
 	for pluginElement := pluginList.Front(); pluginElement != nil; pluginElement = pluginElement.Next() {
 		plg, _ := pluginElement.Value.(GonePlugin)
-		handlerCount = handlerCount + len(plg.activeHandlers)
+		handlerCount = handlerCount + len(plg.ActiveHandlers)
 	}
 	if handlerCount == 0 {
 		return

@@ -1,5 +1,12 @@
 package message
 
+type MessageSegments struct {
+	// Type: text,image,video,sound,action.
+	Type string
+	// Content of the message.
+	Content string
+}
+
 // Gonebot Universal message struct.
 type Message struct {
 	// UID of sender.
@@ -15,12 +22,5 @@ type Message struct {
 	GroupID bool
 
 	// Message segments
-	Segments []MessageSegment
-}
-
-type MessageSegments struct {
-	// Type: text,image,video,sound,action.
-	Type string
-	// Content of the message.
-	Content string
+	Segments []MessageSegments
 }

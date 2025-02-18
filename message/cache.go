@@ -26,7 +26,7 @@ func PushIncomingMsg(newMsg Message) {
 }
 
 // Pop a new message for plugins to handle.
-func GetIncomingMsg() (msg Message) {
+func GetIncomingMsg() Message {
 	msg := <-incomingChan
 	return msg
 }
@@ -41,7 +41,7 @@ func PushResultMsg(resultMsg Message) {
 }
 
 // Pop a result message to send.
-func GetResultMsg() (msg Message) {
+func GetResultMsg() Message {
 	msg := <-resultChan
 	return msg
 }
