@@ -45,3 +45,7 @@ func GetResultMsg() (msg Message) {
 	msg := <-resultChan
 	return msg
 }
+
+func GetMsgChans() (chan Message, chan Message) {
+	return incomingChan, resultChan
+}

@@ -6,9 +6,7 @@ type GoneAdapter struct {
 	Version           string
 	SupportedPlatform string // "qq", "wechat", etc.
 
-	Init  func() // Run when starting
-	Conn  func(incomingChan chan message, resultChan chan message)
-	Final func() // Run when closing
+	Connector func(incomingChan chan message, resultChan chan message) // Main Threading
 }
 
 var adapter GoneAdapter
