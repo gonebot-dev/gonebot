@@ -1,6 +1,6 @@
 package message
 
-type MessageSegments struct {
+type MessageSegment struct {
 	// Type: text,image,video,sound,action.
 	Type string
 	// Content of the message.
@@ -22,5 +22,5 @@ type Message struct {
 	GroupID bool
 
 	// Message segments
-	Segments []MessageSegments
+	Segments []MessageSegment
 }
