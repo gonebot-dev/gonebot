@@ -19,8 +19,11 @@ type Message struct {
 	// If the message contains @at_bot
 	IsToMe bool
 	// Group ID
-	GroupID bool
+	GroupID string
 
 	// Message segments
 	Segments []MessageSegment
+
+	// Raw message if you want to decode yourself.
+	RawMessage string
 }
