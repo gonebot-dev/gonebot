@@ -33,11 +33,12 @@ func ProcessMsg(rawMsg message.Message) (resultMsg message.Message) {
 	return resultMsg
 }
 
-func connWrapper(rawMsg message.Message, resultChan chan message.Message) {
+func connWrapper(rawMsg message.Message) {
 	resultMsg := ProcessMsg(rawMsg)
-	resultChan <- resultMsg
+	message.PushResultMsg(resultMsg)
 }
 
+/*
 func activeHandler(resultChan chan message.Message) {
 	handlerCount := 0
 	for pluginElement := pluginList.Front(); pluginElement != nil; pluginElement = pluginElement.Next() {
@@ -56,11 +57,12 @@ func activeHandler(resultChan chan message.Message) {
 		}
 	}
 }
+*/
 
 // Plugin MsgChannel connector.
-func Connector(incomingChan chan message.Message, resultChan chan message.Message) {
+func Connector() {
 	for {
-		rawMsg := <-incomingChan
-		go connWrapper(rawMsg, resultChan)
+		rawMsg := message.GetIncomingMsg()
+		go connWrapper(rawMsg)
 	}
 }

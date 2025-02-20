@@ -2,8 +2,6 @@ package adapter
 
 import (
 	"log"
-
-	"github.com/gonebot-dev/gonebot/message"
 )
 
 type GoneAdapter struct {
@@ -12,7 +10,7 @@ type GoneAdapter struct {
 	Version           string
 	SupportedPlatform string // "qq", "wechat", etc.
 
-	Connector func(incomingChan chan message.Message, resultChan chan message.Message) // Main Thread
+	Connector func() // Main Thread
 }
 
 var adapter GoneAdapter
@@ -23,9 +21,10 @@ func SetAdapter(a GoneAdapter) {
 	adapterLoaded = true
 }
 
-func StartAdapter(incomingChan chan message.Message, resultChan chan message.Message) {
+func StartAdapter() {
 	if !adapterLoaded {
 		log.Fatal("No Adapter Loaded!")
 	}
-	adapter.Connector(incomingChan, resultChan)
+	log.Printf("Starting Adapter %s", adapter.Name)
+	adapter.Connector()
 }
