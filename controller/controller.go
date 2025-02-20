@@ -7,11 +7,10 @@ import (
 )
 
 func Start() {
-	incomingChan, resultChan := message.GetMsgChans()
 
 	// Start Plugins
-	go plugin.Connector(incomingChan, resultChan)
+	go plugin.Connector(message.IncomingChan, message.ResultChan)
 
 	// Start Adapter
-	adapter.StartAdapter(incomingChan, resultChan)
+	adapter.StartAdapter(message.IncomingChan, message.ResultChan)
 }
