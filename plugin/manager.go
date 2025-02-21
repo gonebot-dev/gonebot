@@ -2,21 +2,25 @@ package plugin
 
 import (
 	"container/list"
-	"log"
+	"fmt"
+	"log/slog"
+	"time"
 
 	"github.com/gonebot-dev/gonebot/message"
+	"github.com/gonebot-dev/gonebot/plugin/handler"
 )
 
 var pluginList *list.List = list.New()
 
 // Load a plugin.
 func LoadPlugin(plugin GonePlugin) {
-	log.Printf("Loading Plugin: %s", plugin.Name)
+	slog.Info(fmt.Sprintf("Loading Plugin: %s", plugin.Name))
 	pluginList.PushBack(plugin)
 }
 
 // Process Message.
 func ProcessMsg(rawMsg message.Message) (resultMsg message.Message) {
+	// Init resultMsg's metadata.
 	resultMsg.SenderID = rawMsg.ReceiverID
 	resultMsg.ReceiverID = rawMsg.SenderID
 
@@ -38,29 +42,29 @@ func connWrapper(rawMsg message.Message) {
 	message.PushResultMsg(resultMsg)
 }
 
-/*
-func activeHandler(resultChan chan message.Message) {
-	handlerCount := 0
+func activeHandlerWrapper(handler handler.GoneActiveHandler) {
+	for {
+		message.PushResultMsg(handler.Handler())
+		// Sleep 1s to avoid bad plugin's performance issue
+		time.Sleep(time.Second)
+	}
+}
+
+func activeHandler() {
 	for pluginElement := pluginList.Front(); pluginElement != nil; pluginElement = pluginElement.Next() {
 		plg, _ := pluginElement.Value.(GonePlugin)
-		handlerCount = handlerCount + len(plg.ActiveHandlers)
-	}
-	if handlerCount == 0 {
-		return
-	}
-	for {
-		for pluginElement := pluginList.Front(); pluginElement != nil; pluginElement = pluginElement.Next() {
-			plg, _ := pluginElement.Value.(GonePlugin)
-			for _, handler := range plg.ActiveHandlers {
-				resultChan <- handler.Handler()
-			}
+		for _, handler := range plg.ActiveHandlers {
+			go activeHandlerWrapper(handler)
 		}
 	}
 }
-*/
 
-// Plugin MsgChannel connector.
+// Connecting Plugin to MessageChannel
 func Connector() {
+	// Start Active Handler
+	go activeHandler()
+
+	// Message Handler
 	for {
 		rawMsg := message.GetIncomingMsg()
 		go connWrapper(rawMsg)

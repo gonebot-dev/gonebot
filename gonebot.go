@@ -1,7 +1,7 @@
 package gonebot
 
 import (
-	"log"
+	"log/slog"
 
 	"github.com/gonebot-dev/gonebot/adapter"
 	"github.com/gonebot-dev/gonebot/controller"
@@ -17,6 +17,6 @@ func LoadPlugin(p plugin.GonePlugin) {
 }
 
 func Start() {
-	log.Printf("Starting Gonebot")
+	slog.Info("Starting Gonebot")
 	controller.Start()
 }

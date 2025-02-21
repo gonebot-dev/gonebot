@@ -1,7 +1,8 @@
 package adapter
 
 import (
-	"log"
+	"fmt"
+	"log/slog"
 )
 
 type GoneAdapter struct {
@@ -23,8 +24,8 @@ func SetAdapter(a GoneAdapter) {
 
 func StartAdapter() {
 	if !adapterLoaded {
-		log.Fatal("No Adapter Loaded!")
+		slog.Error("No Adapter Loaded!")
 	}
-	log.Printf("Starting Adapter %s", adapter.Name)
+	slog.Info(fmt.Sprintf("Starting Adapter %s", adapter.Name))
 	adapter.Connector()
 }

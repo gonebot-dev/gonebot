@@ -1,5 +1,7 @@
 package message
 
+import "strings"
+
 // TODO: getText() etc. utils
 
 func (m *Message) AddTextSegment(text string) {
@@ -28,4 +30,14 @@ func (m *Message) AddSoundSegment(sound string) {
 		Type:    "sound",
 		Content: sound,
 	})
+}
+
+func (m *Message) GetText() string {
+	var builder strings.Builder
+	for _, seg := range m.Segments {
+		if seg.Type == "text" {
+			builder.WriteString(seg.Content)
+		}
+	}
+	return builder.String()
 }

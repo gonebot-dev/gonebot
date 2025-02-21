@@ -4,44 +4,44 @@ import (
 	"github.com/gonebot-dev/gonebot/utils"
 )
 
-var IncomingChan chan Message
-var ResultChan chan Message
+var incomingChan chan Message
+var resultChan chan Message
 
 func init() {
-	IncomingChan = make(chan Message, 128)
-	ResultChan = make(chan Message, 128)
+	incomingChan = make(chan Message, 128)
+	resultChan = make(chan Message, 128)
 }
 
 // Push a new message to plugins.
 func PushIncomingMsg(newMsg Message) {
 	// Drop when full
-	if cap(IncomingChan) == len(IncomingChan) {
-		<-IncomingChan
+	if cap(incomingChan) == len(incomingChan) {
+		<-incomingChan
 	}
 
 	// Push
-	IncomingChan <- newMsg
+	incomingChan <- newMsg
 
 	utils.AddIncomingCount()
 }
 
 // Pop a new message for plugins to handle.
 func GetIncomingMsg() Message {
-	msg := <-IncomingChan
+	msg := <-incomingChan
 	return msg
 }
 
 // Push a result message to adapter.
 func PushResultMsg(resultMsg Message) {
-	if cap(ResultChan) == len(ResultChan) {
-		<-ResultChan
+	if cap(resultChan) == len(resultChan) {
+		<-resultChan
 	}
 
-	ResultChan <- resultMsg
+	resultChan <- resultMsg
 }
 
 // Pop a result message to send.
 func GetResultMsg() Message {
-	msg := <-ResultChan
+	msg := <-resultChan
 	return msg
 }
