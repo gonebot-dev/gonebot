@@ -39,7 +39,9 @@ func ProcessMsg(rawMsg message.Message) (resultMsg message.Message) {
 
 func connWrapper(rawMsg message.Message) {
 	resultMsg := ProcessMsg(rawMsg)
-	message.PushResultMsg(resultMsg)
+	if len(resultMsg.Segments) > 0 {
+		message.PushResultMsg(resultMsg)
+	}
 }
 
 func activeHandlerWrapper(handler handler.GoneActiveHandler) {
