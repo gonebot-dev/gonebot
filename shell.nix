@@ -10,9 +10,6 @@ pkgs.mkShell {
   ];
 
   shellHook = ''
-    export GOPATH=$(pwd)/.go
-    export GOBIN=$GOPATH/bin
-    export PATH=$GOBIN:$PATH
-    mkdir -p $GOPATH
+    go env -w GO111MODULE=on
   '';
 }
