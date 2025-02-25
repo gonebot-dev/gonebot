@@ -29,3 +29,7 @@ func StartAdapter() {
 	slog.Info(fmt.Sprintf("Starting Adapter %s", adapter.Name))
 	adapter.Connector()
 }
+
+func GetCurrentAdatper() GoneAdapter {
+	return adapter
+}
