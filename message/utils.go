@@ -41,3 +41,14 @@ func (m *Message) GetText() string {
 	}
 	return builder.String()
 }
+
+func (m *Message) HasPrefix(prefix string) bool {
+	for _, seg := range m.Segments {
+		if seg.Type == "text" {
+			if strings.HasPrefix(seg.Content, prefix) {
+				return true
+			}
+		}
+	}
+	return false
+}
